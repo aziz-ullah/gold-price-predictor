@@ -3,5 +3,5 @@ __pycache__/
 build/
 node_modules/
 frontend/react-app/node_modules/.cache/
-backend/data/processed/
+backend/data/
 backend/models/

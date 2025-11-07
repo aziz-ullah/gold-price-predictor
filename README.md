@@ -77,7 +77,25 @@ python -m backend.services.trainer --no-tune
 
 Use `--force-preprocess` if you need to regenerate the processed dataset before training.
 
-## 4. Run the Application
+## 4. Deploying for Free
+
+### Backend (Render)
+1. Fork/clone this repo and keep `render.yaml` at the project root.
+2. In the Render dashboard, choose **New → Web Service**, pick this GitHub repo, and leave the branch on `main`.
+3. Render reads `render.yaml`, installs dependencies, runs preprocessing + a quick training pass, and starts FastAPI with Uvicorn on the free tier.
+4. After the first deployment, copy the public URL (e.g. `https://gold-predictor-api.onrender.com`).
+
+When the raw data changes, push to `main` and Render will redeploy automatically. To speed things up you can temporarily drop the `preDeployCommand` in `render.yaml` or switch to `--no-tune`.
+
+### Frontend (Vercel)
+1. Visit [https://vercel.com/new](https://vercel.com/new) and import the repo.
+2. Framework preset: **Create React App**. Build command: `npm install && npm run build`. Output directory: `frontend/react-app/build` (Vercel detects this automatically).
+3. Add an environment variable `REACT_APP_API_BASE_URL` pointing to the Render backend URL.
+4. Deploy and grab the Vercel URL; the dashboard will auto-refresh against the hosted API.
+
+(Any other static host—Netlify, Cloudflare Pages, GitHub Pages—works as long as you set `REACT_APP_API_BASE_URL` to the backend URL.)
+
+## 5. Run the Application
 
 Launch both FastAPI and React via the batch script from the project root:
 
