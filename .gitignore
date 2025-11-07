@@ -1,4 +1,7 @@
-data/
+.venv/
 __pycache__/
-*.pkl
-.env
+build/
+node_modules/
+frontend/react-app/node_modules/.cache/
+backend/data/processed/
+backend/models/

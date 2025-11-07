@@ -55,6 +55,8 @@ body {
 .actions {
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 16px;
     margin-bottom: 24px;
 }
 
@@ -68,6 +70,11 @@ body {
     letter-spacing: 0.01em;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.update-note {
+    color: #64748b;
+    font-size: 0.95rem;
 }
 
 .actions button:disabled {

@@ -12,6 +12,7 @@ import {
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8000";
 const TOLA_CONVERSION = 0.375;
+const AUTO_REFRESH_MS = 30_000;
 
 const round2 = (value) =>
     typeof value === "number" && Number.isFinite(value)
@@ -31,6 +32,7 @@ function App() {
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [lastUpdated, setLastUpdated] = useState(null);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
@@ -42,6 +44,7 @@ function App() {
             ]);
             setLatest(latestResponse.data);
             setHistory(historyResponse.data?.data ?? []);
+            setLastUpdated(new Date());
         } catch (err) {
             const message = err.response?.data?.detail || err.message || "Unknown error";
             setError(message);
@@ -52,6 +55,8 @@ function App() {
 
     useEffect(() => {
         fetchData();
+        const intervalId = setInterval(fetchData, AUTO_REFRESH_MS);
+        return () => clearInterval(intervalId);
     }, [fetchData]);
 
     const viewModel = useMemo(() => {
@@ -168,6 +173,10 @@ function App() {
                     <button onClick={fetchData} disabled={loading}>
                         {loading ? "Refreshing..." : "Refresh"}
                     </button>
+                    <span className="update-note">
+                        Auto refresh every {AUTO_REFRESH_MS / 1000}s
+                        {lastUpdated ? ` · Last updated ${lastUpdated.toLocaleTimeString()}` : ""}
+                    </span>
                 </div>
 
                 {error && <div className="error">{error}</div>}
