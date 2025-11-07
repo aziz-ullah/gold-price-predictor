@@ -79,7 +79,19 @@ Use `--force-preprocess` if you need to regenerate the processed dataset before 
 
 ## 4. Deploying for Free
 
-### Backend (Render)
+### Option 1: Backend (Back4app) ⭐ **NO CREDIT CARD REQUIRED**
+1. Go to [back4app.com](https://www.back4app.com) and sign up with GitHub (no credit card needed)
+2. Create a new "Containers" app and connect your GitHub repository
+3. Configure deployment:
+   - **Dockerfile Path:** `backend/Dockerfile`
+   - **Port:** 8000
+   - **App Name:** `gold-predictor-api`
+4. Deploy - Back4app will build your container and start FastAPI automatically
+5. Copy your public URL (e.g. `https://gold-predictor-api-xxxxx.back4app.io`)
+
+**Free Tier:** 256MB RAM, 100GB monthly transfer, 600 active hours/month
+
+### Option 2: Backend (Render) ⚠️ Credit Card Required
 1. Fork/clone this repo and keep `render.yaml` at the project root.
 2. In the Render dashboard, choose **New → Web Service**, pick this GitHub repo, and leave the branch on `main`.
 3. Render reads `render.yaml`, installs dependencies, runs preprocessing + a quick training pass, and starts FastAPI with Uvicorn on the free tier.
@@ -87,33 +99,44 @@ Use `--force-preprocess` if you need to regenerate the processed dataset before 
 
 When the raw data changes, push to `main` and Render will redeploy automatically. To speed things up you can temporarily drop the `preDeployCommand` in `render.yaml` or switch to `--no-tune`.
 
-### Frontend (Vercel)
+### Frontend (Vercel) ✅ **NO CREDIT CARD REQUIRED**
 1. Visit [https://vercel.com/new](https://vercel.com/new) and import the repo.
 2. Framework preset: **Create React App**. Build command: `npm install && npm run build`. Output directory: `frontend/react-app/build` (Vercel detects this automatically).
-3. Add an environment variable `REACT_APP_API_BASE_URL` pointing to the Render backend URL.
+3. Add an environment variable `REACT_APP_API_BASE_URL` pointing to your backend URL (from Back4app or Render).
 4. Deploy and grab the Vercel URL; the dashboard will auto-refresh against the hosted API.
 
 (Any other static host—Netlify, Cloudflare Pages, GitHub Pages—works as long as you set `REACT_APP_API_BASE_URL` to the backend URL.)
 
+**Note:** For detailed Back4app deployment instructions, see [BACK4APP_DEPLOYMENT.md](BACK4APP_DEPLOYMENT.md)
+
 ## 5. Run the Application
 
+### Option 1: Batch Script (Windows)
 Launch both FastAPI and React via the batch script from the project root:
 
 ```powershell
 run_project.bat
 ```
 
-Prefer to start services manually? From the project root run:
+### Option 2: Manual Start
+Start services manually from the project root:
 
+Backend:
 ```powershell
 uvicorn backend.main:app --reload
 ```
 
-and in another terminal:
-
+Frontend (in another terminal):
 ```powershell
 cd frontend\react-app
 npm start
+```
+
+### Option 3: Docker (Recommended for Testing)
+Use Docker Compose to run both services:
+
+```powershell
+docker-compose up --build
 ```
 
 Services start on:
