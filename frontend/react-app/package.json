@@ -14,6 +14,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+  "browserslist": "^4.22.1",
   "@testing-library/dom": "^10.4.1",
   "@testing-library/jest-dom": "^6.0.0",
   "@testing-library/react": "^14.0.0",
