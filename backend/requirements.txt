@@ -4,3 +4,13 @@ pandas
 numpy
 scikit-learn
 joblib
+yfinance
+requests
+beautifulsoup4
+lxml
+xgboost
+tensorflow
+prophet
+statsmodels
+vaderSentiment
+textblob
