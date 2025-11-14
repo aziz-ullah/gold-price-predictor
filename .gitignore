@@ -3,5 +3,16 @@ __pycache__/
 build/
 node_modules/
 frontend/react-app/node_modules/.cache/
+# Ignore data directories by default
 backend/data/
 backend/models/
+# But allow specific files needed for deployment
+!backend/data/raw/
+!backend/data/processed/
+!backend/data/raw/*.csv
+!backend/data/processed/*.csv
+!backend/models/
+!backend/models/*.pkl
+# Ignore other data subdirectories
+backend/data/exogenous/
+backend/data/sentiment/
