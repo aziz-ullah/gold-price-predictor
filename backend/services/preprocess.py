@@ -89,7 +89,10 @@ def preprocess_gold_data(
     df["Daily_Change_%"] = df["Price"].pct_change() * 100
     df["Target_Change_%"] = df["Price"].pct_change().shift(-1) * 100
 
-    df = df.dropna().reset_index(drop=True)
+    # Only drop rows where required features are missing (not all features)
+    from backend.services.features import FEATURE_COLUMNS, TARGET_COLUMN
+    required_cols = FEATURE_COLUMNS + [TARGET_COLUMN]
+    df = df.dropna(subset=required_cols).reset_index(drop=True)
 
     processed_csv.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(processed_csv, index=False)
@@ -105,7 +108,28 @@ def ensure_processed_exists() -> Path:
 
     processed_csv = DEFAULT_PROCESSED_PATH
     if not processed_csv.exists():
-        preprocess_gold_data()
+        # If raw data doesn't exist, try to fetch some initial data
+        if not DEFAULT_RAW_PATH.exists():
+            try:
+                from backend.services.fetch_today import fetch_and_process
+                print("⚠️ Raw data file not found. Attempting to fetch initial data...")
+                fetch_and_process()
+                # If fetch succeeded, try preprocessing again
+                if DEFAULT_RAW_PATH.exists():
+                    preprocess_gold_data()
+                else:
+                    raise FileNotFoundError(
+                        f"Raw data file not found at {DEFAULT_RAW_PATH}. "
+                        "Place a CSV in backend/data/raw or ensure the API is accessible."
+                    )
+            except Exception as e:
+                raise FileNotFoundError(
+                    f"Raw data file not found at {DEFAULT_RAW_PATH}. "
+                    f"Failed to fetch initial data: {e}. "
+                    "Please place a CSV file in backend/data/raw."
+                )
+        else:
+            preprocess_gold_data()
     return processed_csv
 
 

@@ -116,7 +116,7 @@ def train_gold_model(
     )
 
     if enable_tuning:
-        print("➡️  Running hyperparameter search (this can take a few minutes)...")
+        print("[*] Running hyperparameter search (this can take a few minutes)...")
         model, best_params, cv_mae = _tune_random_forest(X_train, y_train)
         print("Best cross-validated MAE: {:.4f}%".format(cv_mae))
         print("Best parameters:")
