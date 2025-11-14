@@ -83,10 +83,29 @@ def load_resources() -> None:
     """Load the trained model and ensure the processed data is available."""
 
     global model
-    ensure_processed_exists()
-    if MODEL_PATH.exists():
-        model = load_trained_model(MODEL_PATH)
-    else:
+    try:
+        # Try to ensure processed data exists, but don't fail if it doesn't
+        try:
+            ensure_processed_exists()
+        except Exception as e:
+            print(f"[!] Warning: Could not ensure processed data exists: {e}")
+            print("[!] API will start but predictions may not work until data is available.")
+        
+        # Try to load model, but don't fail if it doesn't exist
+        if MODEL_PATH.exists():
+            try:
+                model = load_trained_model(MODEL_PATH)
+                print(f"[OK] Model loaded successfully from {MODEL_PATH}")
+            except Exception as e:
+                print(f"[!] Warning: Could not load model: {e}")
+                model = None
+        else:
+            print(f"[!] Warning: Model file not found at {MODEL_PATH}")
+            print("[!] API will start but predictions will return 503 error.")
+            model = None
+    except Exception as e:
+        print(f"[!] Error during startup: {e}")
+        print("[!] API will start but may not function correctly.")
         model = None
 
 

@@ -6,8 +6,8 @@ services:
     region: oregon
     buildCommand: pip install -r backend/requirements.txt
     preDeployCommand: |
-      cd backend
-      python -m backend.services.preprocess
-      python -m backend.services.trainer --no-tune
+      cd backend || exit 1
+      python -m backend.services.preprocess || echo "Preprocessing failed, continuing..."
+      python -m backend.services.trainer --no-tune || echo "Training failed, continuing..."
     startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
 
