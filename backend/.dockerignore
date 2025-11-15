@@ -20,9 +20,10 @@ coverage.xml
 .hypothesis
 
 # Data files (will be created during deployment)
-data/raw/*.csv
-data/processed/*.csv
-models/*.pkl
+!raw/Gold Futures Historical Data.csv
+!processed/*.csv
+!models/*.pkl
+
 
 # Virtual environment
 venv/

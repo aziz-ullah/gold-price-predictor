@@ -1,18 +1,26 @@
+# Python / Virtualenv
 .venv/
 __pycache__/
+
+# Build folders
 build/
+
+# Node modules
 node_modules/
 frontend/react-app/node_modules/.cache/
-# Ignore data directories by default
+
+# Ignore all data and models by default
 backend/data/
 backend/models/
+
 # But allow specific files needed for deployment
 !backend/data/raw/
-!backend/data/processed/
 !backend/data/raw/*.csv
+!backend/data/processed/
 !backend/data/processed/*.csv
 !backend/models/
 !backend/models/*.pkl
-# Ignore other data subdirectories
+
+# Ignore other data subdirectories not needed
 backend/data/exogenous/
 backend/data/sentiment/
